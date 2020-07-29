@@ -220,7 +220,7 @@ paths:
           description: OK
       description: Delete a webhook action.
       tags:
-        - pipeline
+        - webhook action
   /api/v1/controller/authenticated/sms:
     post:
       summary: ''
@@ -326,7 +326,7 @@ paths:
           description: OK
       description: Delete an sms action.
       tags:
-        - pipeline
+        - sms action
   /api/v1/controller/authenticated/email:
     post:
       summary: ''
@@ -432,7 +432,7 @@ paths:
           description: OK
       description: Delete an email action.
       tags:
-        - pipeline
+        - email action
 components:
   schemas:
     pipeline:
