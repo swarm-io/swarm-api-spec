@@ -637,6 +637,7 @@ components:
           name: My sms action
           phoneNumber: '+18011234567'
           messageBody: 'Item with id {{itemId}} has been processed.'
+      description: 'SMS actions send sms messages when they are triggered. SMS actions are simple and composed of a phoneNumber to send to, and a messageBody to send. Only a single phone number is supported, if you would like to send to multiple phone numbers, create multiple sms actions. The messageBody supports templating using double bracketed field names to substitude fields on messages sent to the action. For example given a message `{"name": "Robert"}` you may configure a messageBody with templating like "Hello {{name}}" and the message sent would be "Hello Robert"'
     emailAction:
       title: emailAction
       type: object
