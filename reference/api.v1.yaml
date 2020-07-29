@@ -49,10 +49,6 @@ paths:
                       outputs:
                         - email-88a44654-093b-48a8-8f19-90e08f3e62c5
                       required: true
-          application/xml:
-            schema:
-              type: object
-              properties: {}
         description: The pipeline definition.
       tags:
         - pipeline
@@ -155,10 +151,6 @@ paths:
                       outputs:
                         - email-88a44654-093b-48a8-8f19-90e08f3e62c5
                       required: true
-          application/xml:
-            schema:
-              type: object
-              properties: {}
         description: The webhook action definition
       tags:
         - webhook action
@@ -261,10 +253,6 @@ paths:
                       outputs:
                         - email-88a44654-093b-48a8-8f19-90e08f3e62c5
                       required: true
-          application/xml:
-            schema:
-              type: object
-              properties: {}
         description: The sms action definition
       tags:
         - sms action
@@ -367,10 +355,6 @@ paths:
                       outputs:
                         - email-88a44654-093b-48a8-8f19-90e08f3e62c5
                       required: true
-          application/xml:
-            schema:
-              type: object
-              properties: {}
         description: The email action definition
       tags:
         - email action
