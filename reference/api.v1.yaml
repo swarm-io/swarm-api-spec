@@ -663,6 +663,7 @@ components:
           type: string
         isHtml:
           type: boolean
+      description: 'Email actions send emails when they are triggered. Email actions are simple and composed of an array of email addresses to send to, a subject, a body, and a boolean field isHtml indicating whether the messageBody should be treated as html or not. The subject and body support templating using double bracketed field names to substitude fields on messages sent to the action. For example given a message `{"name": "Robert"}` you may configure a subject with templating like "Hello {{name}}" and the subject of the email sent would be "Hello Robert". The body field may contain complex html and css to create whatever email you''d like, and supports the same templating outlined for subjects above.'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
