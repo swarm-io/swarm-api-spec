@@ -161,7 +161,7 @@ paths:
               properties: {}
         description: The webhook action definition
       tags:
-        - pipeline
+        - webhook action
   '/api/v1/controller/authenticated/webhook/{webhookActionName}':
     parameters:
       - schema:
@@ -211,7 +211,7 @@ paths:
                       required: true
         description: the webhook action definition.
       tags:
-        - pipeline
+        - webhook action
     delete:
       summary: ''
       operationId: deleteWebhookAction
@@ -267,7 +267,7 @@ paths:
               properties: {}
         description: The sms action definition
       tags:
-        - pipeline
+        - sms action
   '/api/v1/controller/authenticated/sms/{smsActionName}':
     parameters:
       - schema:
@@ -317,7 +317,7 @@ paths:
                       required: true
         description: The sms action definition.
       tags:
-        - pipeline
+        - sms action
     delete:
       summary: ''
       operationId: deleteSmsAction
@@ -373,7 +373,7 @@ paths:
               properties: {}
         description: The email action definition
       tags:
-        - pipeline
+        - email action
   '/api/v1/controller/authenticated/email/{emailActionName}':
     parameters:
       - schema:
@@ -423,7 +423,7 @@ paths:
                       required: true
         description: The email action definition.
       tags:
-        - pipeline
+        - email action
     delete:
       summary: ''
       operationId: deleteEmailAction
@@ -641,3 +641,6 @@ components:
       name: X-API-KEY
 tags:
   - name: pipeline
+  - name: webhook action
+  - name: sms action
+  - name: email action
