@@ -580,6 +580,34 @@ components:
     webhookAction:
       title: webhookAction
       type: object
+      x-examples:
+        example-webhook-action:
+          name: My webhook action
+          url: 'https://my.domain.com?id=12345'
+          method: POST
+          headers:
+            - name: authorization
+              value: Basic YWRtaW46YWRtaW4=
+          maxConcurrentRequests: 25
+          verifyTlsCertificate: true
+          successCodes:
+            - 200
+            - 201
+            - 202
+      description: |-
+        Webhook actions make http requests when they are triggered. Webhook actions are composed of a url to make the request to, the http method to use, headers to send, maxConcurrentRequests to throttle outgoing http requests, verifyTlsCertificate which toggles tls certificate verification when sending requests, and successCodes which indicate what http response codes should be considered successful. Responses with codes not in the configured successCodes will be retried until they are successful.
+
+        What is the purpose of maxConcurrentRequests?
+
+        maxConcurrentRequests is used to throttle outgoing http requests and specifies the maximum number of simultaneous outgoing requests. This is useful if the api that the webhook is sending to has limits, or can't handle large numbers of simultaneous requests.
+
+        What is the purpose of verifyTlsCertificate?
+
+        This is used to toggle verification of TLS certificates on the receiving endpoint. If your endpoint is not using SSL or using a self signed certificate, this should be set to false.
+
+        What is the purpose of successCodes?
+
+        This is used to define what http status codes returned by the request are to be considered successful. If a status code is received that's not in the configured successCodes, then the request will be retried until it receives an http status code that is in the configured successCodes.
       properties:
         name:
           type: string
@@ -597,27 +625,13 @@ components:
               value:
                 type: string
         maxConcurrentRequests:
-          type: string
+          type: integer
         verifyTlsCertificate:
-          type: string
+          type: boolean
         successCodes:
           type: array
           items:
             type: integer
-      x-examples:
-        example-webhook-action:
-          name: My webhook action
-          url: 'https://my.domain.com?id=12345'
-          method: POST
-          headers:
-            - name: authorization
-              value: Basic YWRtaW46YWRtaW4=
-          maxConcurrentRequests: 25
-          verifyTlsCertificate: true
-          successCodes:
-            - 200
-            - 201
-            - 202
     smsAction:
       title: smsAction
       type: object
