@@ -477,7 +477,35 @@ components:
         - name
         - outputs
         - steps
-      description: ''
+      description: |-
+        A pipeline is what processes json objects sent to the swarm api and may be used for fanout, transformations, and filtering. A pipeline has 0 or more steps, which may be either a transformation step, or a filter step. Step ordering is respected when a pipeline is being evaluated, and every step is evaluated for each message. A pipeline must always have at least one configured output, either on the pipeline itself, or on one of the steps. Step outputs are isolated from the pipeline output, that means that if a step is considered successful then the message will be sent to the outputs listed for that step. Each step has a boolean field "required" that indicates that step must pass in order for the pipeline outputs to be triggered. This is useful for successive filters and transformations on messages.
+
+        What are filter steps?
+
+        Filter steps are used to filter messages using logical operators. A filter step is composed of one or more statements. Each statement has a field, an operator, and a value. Any valid json type can be compared as long as the value type and the type on the field in the message are the same. Filter steps are defined as an object where the key is the step's name, and the key is used in expressions.
+
+        What operators are supported in filter step statements?
+
+        You may use > < >= <= == != as operators in statements.
+
+        What is a filter step expression?
+
+        Expressions are how you compose statements using logic operators. For example you could create three statements named "one" "two" and "three" and compose them together any way you like such as "one OR (two and three)" or "one XOR two AND three"
+
+        What logic operators are supported in expressions?
+
+        You may use and xand nand or xor nor in expressions.
+
+        Can I use parenthesis in expressions?
+        Yes, you can combine parenthesis with operators to form very complex expressions.
+
+        What are transform steps?
+
+        Transform steps are used to transform messages and currently only support  numerical field values and transformations. Transform steps are composed of fieldName, which is the resulting fieldName for the transformation, leftField which is the source field, operator, and either constant or rightField. If you want to transform using a constant value use the constant field. If you want to transform using another field in the message, use the rightField field.
+
+        What operators are supported in transform steps?
+
+        You may use - + / * operators in transform steps.
     filterstep:
       title: filterstep
       type: object
