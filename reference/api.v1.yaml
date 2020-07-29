@@ -1,0 +1,643 @@
+openapi: 3.0.0
+info:
+  title: Swarm API
+  version: '1.0'
+  description: Swarm API
+  contact:
+    name: Swarm Support
+    email: support@swarmiolabs.com
+servers:
+  - url: 'https://api.gke-swarmprod.k8s.swarmiolabs.com'
+paths:
+  /api/v1/controller/authenticated/pipeline:
+    post:
+      summary: ''
+      operationId: createPipeline
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      description: Create a new pipeline.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pipeline'
+            examples:
+              example pipeline:
+                value:
+                  name: My Pipeline
+                  outputs:
+                    - webhook-4951f476-f33a-4f33-bcbc-c3d7ce904225
+                  steps:
+                    - type: transform
+                      fieldName: scorePlusTen
+                      leftField: score
+                      operator: +
+                      constant: 10
+                      required: true
+                    - type: filter
+                      statements:
+                        scoreOverTen:
+                          field: score
+                          operator: '>'
+                          value: 10
+                      expression: scoreOverTen
+                      outputs:
+                        - email-88a44654-093b-48a8-8f19-90e08f3e62c5
+                      required: true
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: The pipeline definition.
+      tags:
+        - pipeline
+  '/api/v1/controller/authenticated/pipeline/{pipelineName}':
+    parameters:
+      - schema:
+          type: string
+        name: pipelineName
+        in: path
+        description: The name of the pipeline to update
+        required: true
+    put:
+      summary: ''
+      operationId: updatePipeline
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      description: Update an existing pipeline
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pipeline'
+            examples:
+              example-pipeline:
+                value:
+                  name: My Pipeline
+                  outputs:
+                    - webhook-4951f476-f33a-4f33-bcbc-c3d7ce904225
+                  steps:
+                    - type: transform
+                      fieldName: scorePlusTen
+                      leftField: score
+                      operator: +
+                      constant: 10
+                      required: true
+                    - type: filter
+                      statements:
+                        scoreOverTen:
+                          field: score
+                          operator: '>'
+                          value: 10
+                      expression: scoreOverTen
+                      outputs:
+                        - email-88a44654-093b-48a8-8f19-90e08f3e62c5
+                      required: true
+        description: ''
+      tags:
+        - pipeline
+    delete:
+      summary: ''
+      operationId: deletePipeline
+      responses:
+        '200':
+          description: OK
+      description: Delete a pipeline.
+      tags:
+        - pipeline
+  /api/v1/controller/authenticated/webhook:
+    post:
+      summary: ''
+      operationId: createWebhookAction
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      description: Create a new webhook action.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webhookAction'
+            examples:
+              example pipeline:
+                value:
+                  name: My Pipeline
+                  outputs:
+                    - webhook-4951f476-f33a-4f33-bcbc-c3d7ce904225
+                  steps:
+                    - type: transform
+                      fieldName: scorePlusTen
+                      leftField: score
+                      operator: +
+                      constant: 10
+                      required: true
+                    - type: filter
+                      statements:
+                        scoreOverTen:
+                          field: score
+                          operator: '>'
+                          value: 10
+                      expression: scoreOverTen
+                      outputs:
+                        - email-88a44654-093b-48a8-8f19-90e08f3e62c5
+                      required: true
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: The webhook action definition
+      tags:
+        - pipeline
+  '/api/v1/controller/authenticated/webhook/{webhookActionName}':
+    parameters:
+      - schema:
+          type: string
+        name: webhookActionName
+        in: path
+        description: The name of the webhook action to update
+        required: true
+    put:
+      summary: ''
+      operationId: updateWebhookAction
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      description: Update an existing webhook action.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webhookAction'
+            examples:
+              example-pipeline:
+                value:
+                  name: My Pipeline
+                  outputs:
+                    - webhook-4951f476-f33a-4f33-bcbc-c3d7ce904225
+                  steps:
+                    - type: transform
+                      fieldName: scorePlusTen
+                      leftField: score
+                      operator: +
+                      constant: 10
+                      required: true
+                    - type: filter
+                      statements:
+                        scoreOverTen:
+                          field: score
+                          operator: '>'
+                          value: 10
+                      expression: scoreOverTen
+                      outputs:
+                        - email-88a44654-093b-48a8-8f19-90e08f3e62c5
+                      required: true
+        description: the webhook action definition.
+      tags:
+        - pipeline
+    delete:
+      summary: ''
+      operationId: deleteWebhookAction
+      responses:
+        '200':
+          description: OK
+      description: Delete a webhook action.
+      tags:
+        - pipeline
+  /api/v1/controller/authenticated/sms:
+    post:
+      summary: ''
+      operationId: createSmsAction
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      description: Create a new sms action.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/smsAction'
+            examples:
+              example pipeline:
+                value:
+                  name: My Pipeline
+                  outputs:
+                    - webhook-4951f476-f33a-4f33-bcbc-c3d7ce904225
+                  steps:
+                    - type: transform
+                      fieldName: scorePlusTen
+                      leftField: score
+                      operator: +
+                      constant: 10
+                      required: true
+                    - type: filter
+                      statements:
+                        scoreOverTen:
+                          field: score
+                          operator: '>'
+                          value: 10
+                      expression: scoreOverTen
+                      outputs:
+                        - email-88a44654-093b-48a8-8f19-90e08f3e62c5
+                      required: true
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: The sms action definition
+      tags:
+        - pipeline
+  '/api/v1/controller/authenticated/sms/{smsActionName}':
+    parameters:
+      - schema:
+          type: string
+        name: smsActionName
+        in: path
+        description: The name of the webhook action to update
+        required: true
+    put:
+      summary: ''
+      operationId: updateSmsAction
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      description: Update an existing sms action.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/smsAction'
+            examples:
+              example-pipeline:
+                value:
+                  name: My Pipeline
+                  outputs:
+                    - webhook-4951f476-f33a-4f33-bcbc-c3d7ce904225
+                  steps:
+                    - type: transform
+                      fieldName: scorePlusTen
+                      leftField: score
+                      operator: +
+                      constant: 10
+                      required: true
+                    - type: filter
+                      statements:
+                        scoreOverTen:
+                          field: score
+                          operator: '>'
+                          value: 10
+                      expression: scoreOverTen
+                      outputs:
+                        - email-88a44654-093b-48a8-8f19-90e08f3e62c5
+                      required: true
+        description: The sms action definition.
+      tags:
+        - pipeline
+    delete:
+      summary: ''
+      operationId: deleteSmsAction
+      responses:
+        '200':
+          description: OK
+      description: Delete an sms action.
+      tags:
+        - pipeline
+  /api/v1/controller/authenticated/email:
+    post:
+      summary: ''
+      operationId: createEmailAction
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      description: Create a new email action.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailAction'
+            examples:
+              example pipeline:
+                value:
+                  name: My Pipeline
+                  outputs:
+                    - webhook-4951f476-f33a-4f33-bcbc-c3d7ce904225
+                  steps:
+                    - type: transform
+                      fieldName: scorePlusTen
+                      leftField: score
+                      operator: +
+                      constant: 10
+                      required: true
+                    - type: filter
+                      statements:
+                        scoreOverTen:
+                          field: score
+                          operator: '>'
+                          value: 10
+                      expression: scoreOverTen
+                      outputs:
+                        - email-88a44654-093b-48a8-8f19-90e08f3e62c5
+                      required: true
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: The email action definition
+      tags:
+        - pipeline
+  '/api/v1/controller/authenticated/email/{emailActionName}':
+    parameters:
+      - schema:
+          type: string
+        name: emailActionName
+        in: path
+        description: The name of the webhook action to update
+        required: true
+    put:
+      summary: ''
+      operationId: updateEmailAction
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      description: Update an existing email action.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailAction'
+            examples:
+              example-pipeline:
+                value:
+                  name: My Pipeline
+                  outputs:
+                    - webhook-4951f476-f33a-4f33-bcbc-c3d7ce904225
+                  steps:
+                    - type: transform
+                      fieldName: scorePlusTen
+                      leftField: score
+                      operator: +
+                      constant: 10
+                      required: true
+                    - type: filter
+                      statements:
+                        scoreOverTen:
+                          field: score
+                          operator: '>'
+                          value: 10
+                      expression: scoreOverTen
+                      outputs:
+                        - email-88a44654-093b-48a8-8f19-90e08f3e62c5
+                      required: true
+        description: The email action definition.
+      tags:
+        - pipeline
+    delete:
+      summary: ''
+      operationId: deleteEmailAction
+      responses:
+        '200':
+          description: OK
+      description: Delete an email action.
+      tags:
+        - pipeline
+components:
+  schemas:
+    pipeline:
+      title: pipeline
+      type: object
+      x-examples:
+        example-pipeline:
+          name: My Pipeline
+          outputs:
+            - webhook-4951f476-f33a-4f33-bcbc-c3d7ce904225
+          steps:
+            - type: transform
+              fieldName: scorePlusTen
+              leftField: score
+              operator: +
+              constant: 10
+              required: true
+            - type: filter
+              statements:
+                scoreOverTen:
+                  field: score
+                  operator: '>'
+                  value: 10
+              expression: scoreOverTen
+              outputs:
+                - email-88a44654-093b-48a8-8f19-90e08f3e62c5
+              required: true
+      properties:
+        name:
+          type: string
+        outputs:
+          type: array
+          items:
+            type: string
+        steps:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/filterstep'
+              - $ref: '#/components/schemas/transformStep'
+      required:
+        - name
+        - outputs
+        - steps
+      description: ''
+    filterstep:
+      title: filterstep
+      type: object
+      properties:
+        type:
+          type: string
+        statements:
+          type: object
+          properties:
+            statementName:
+              $ref: '#/components/schemas/filterStatement'
+        expression:
+          type: string
+        outputs:
+          type: array
+          items:
+            type: string
+        required:
+          type: boolean
+      required:
+        - type
+        - statements
+        - expression
+        - outputs
+        - required
+    filterStatement:
+      title: filterStatement
+      type: object
+      properties:
+        field:
+          type: string
+        operator:
+          type: string
+        value:
+          type:
+            - string
+            - number
+            - boolean
+      required:
+        - field
+        - operator
+        - value
+    transformStep:
+      title: transformStep
+      type: object
+      properties:
+        type:
+          type: string
+        fieldName:
+          type: string
+        leftField:
+          type: string
+        operator:
+          type: string
+        rightField:
+          type: string
+        constant:
+          type: number
+        outputs:
+          type: array
+          items:
+            type: string
+        required:
+          type: boolean
+      required:
+        - type
+        - fieldName
+        - leftField
+        - operator
+        - outputs
+        - required
+    webhookAction:
+      title: webhookAction
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+        method:
+          type: string
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: string
+        maxConcurrentRequests:
+          type: string
+        verifyTlsCertificate:
+          type: string
+        successCodes:
+          type: array
+          items:
+            type: integer
+      x-examples:
+        example-webhook-action:
+          name: My webhook action
+          url: 'https://my.domain.com?id=12345'
+          method: POST
+          headers:
+            - name: authorization
+              value: Basic YWRtaW46YWRtaW4=
+          maxConcurrentRequests: 25
+          verifyTlsCertificate: true
+          successCodes:
+            - 200
+            - 201
+            - 202
+    smsAction:
+      title: smsAction
+      type: object
+      properties:
+        name:
+          type: string
+        phoneNumber:
+          type: string
+        messageBody:
+          type: string
+      required:
+        - name
+        - phoneNumber
+        - messageBody
+      x-examples:
+        example-sms-action:
+          name: My sms action
+          phoneNumber: '+18011234567'
+          messageBody: 'Item with id {{itemId}} has been processed.'
+    emailAction:
+      title: emailAction
+      type: object
+      x-examples:
+        example-email-action:
+          name: My email action
+          to:
+            - address1@example.com
+            - address2@example.com
+          subject: 'ID {{itemId}} has completed processing'
+          body: '<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="ang"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> <title>Demystifying Email Design</title> <meta name="viewport" content="width=device-width, initial-scale=1.0"/></head><body><h1>ID{{itemId}}has completed processing</h1><p>Result:{{statusCode}}</p></body></html>'
+          isHtml: true
+      properties:
+        name:
+          type: string
+        to:
+          type: array
+          items:
+            type: string
+        subject:
+          type: string
+        body:
+          type: string
+        isHtml:
+          type: boolean
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+tags:
+  - name: pipeline
