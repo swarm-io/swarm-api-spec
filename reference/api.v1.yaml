@@ -484,6 +484,8 @@ paths:
                   reading: '12.79'
                   unit: psi
                   timestamp: '2020-07-30T12:30:37.955612'
+      tags:
+        - publish
     parameters:
       - schema:
           type: string
@@ -746,3 +748,4 @@ tags:
   - name: webhook action
   - name: sms action
   - name: email action
+  - name: publish
