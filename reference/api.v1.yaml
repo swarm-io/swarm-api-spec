@@ -7,11 +7,12 @@ info:
     name: Swarm Support
     email: support@swarmiolabs.com
 servers:
-  - url: 'https://api.gke-swarmprod.k8s.swarmiolabs.com'
+  - url: 'https://api.swarmiolabs.com'
+    description: ''
 paths:
   /api/v1/controller/authenticated/pipeline:
     post:
-      summary: ''
+      summary: Create a Pipeline
       operationId: createPipeline
       responses:
         '201':
@@ -20,7 +21,35 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-      description: Create a new pipeline.
+      description: |-
+        A pipeline is what processes json objects sent to the swarm api and may be used for fanout, transformations, and filtering. A pipeline has 0 or more steps, which may be either a transformation step, or a filter step. Step ordering is respected when a pipeline is being evaluated, and every step is evaluated for each message. A pipeline must always have at least one configured output, either on the pipeline itself, or on one of the steps. Step outputs are isolated from the pipeline output, that means that if a step is considered successful then the message will be sent to the outputs listed for that step. Each step has a boolean field "required" that indicates that step must pass in order for the pipeline outputs to be triggered. This is useful for successive filters and transformations on messages.
+
+        What are filter steps?
+
+        Filter steps are used to filter messages using logical operators. A filter step is composed of one or more statements. Each statement has a field, an operator, and a value. Any valid json type can be compared as long as the value type and the type on the field in the message are the same. Filter steps are defined as an object where the key is the step's name, and the key is used in expressions.
+
+        What operators are supported in filter step statements?
+
+        You may use > < >= <= == != as operators in statements.
+
+        What is a filter step expression?
+
+        Expressions are how you compose statements using logic operators. For example you could create three statements named "one" "two" and "three" and compose them together any way you like such as "one OR (two and three)" or "one XOR two AND three"
+
+        What logic operators are supported in expressions?
+
+        You may use and xand nand or xor nor in expressions.
+
+        Can I use parenthesis in expressions?
+        Yes, you can combine parenthesis with operators to form very complex expressions.
+
+        What are transform steps?
+
+        Transform steps are used to transform messages and currently only support  numerical field values and transformations. Transform steps are composed of fieldName, which is the resulting fieldName for the transformation, leftField which is the source field, operator, and either constant or rightField. If you want to transform using a constant value use the constant field. If you want to transform using another field in the message, use the rightField field.
+
+        What operators are supported in transform steps?
+
+        You may use - + / * operators in transform steps.
       requestBody:
         content:
           application/json:
@@ -113,7 +142,7 @@ paths:
         - pipeline
   /api/v1/controller/authenticated/webhook:
     post:
-      summary: ''
+      summary: Create a Webhook Action
       operationId: createWebhookAction
       responses:
         '201':
@@ -122,7 +151,20 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-      description: Create a new webhook action.
+      description: |-
+        Webhook actions make http requests when they are triggered. Webhook actions are composed of a url to make the request to, the http method to use, headers to send, maxConcurrentRequests to throttle outgoing http requests, verifyTlsCertificate which toggles tls certificate verification when sending requests, and successCodes which indicate what http response codes should be considered successful. Responses with codes not in the configured successCodes will be retried until they are successful.
+
+        What is the purpose of maxConcurrentRequests?
+
+        maxConcurrentRequests is used to throttle outgoing http requests and specifies the maximum number of simultaneous outgoing requests. This is useful if the api that the webhook is sending to has limits, or can't handle large numbers of simultaneous requests.
+
+        What is the purpose of verifyTlsCertificate?
+
+        This is used to toggle verification of TLS certificates on the receiving endpoint. If your endpoint is not using SSL or using a self signed certificate, this should be set to false.
+
+        What is the purpose of successCodes?
+
+        This is used to define what http status codes returned by the request are to be considered successful. If a status code is received that's not in the configured successCodes, then the request will be retried until it receives an http status code that is in the configured successCodes.
       requestBody:
         content:
           application/json:
@@ -215,7 +257,7 @@ paths:
         - webhook action
   /api/v1/controller/authenticated/sms:
     post:
-      summary: ''
+      summary: Create an SMS Action
       operationId: createSmsAction
       responses:
         '201':
@@ -224,7 +266,7 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-      description: Create a new sms action.
+      description: 'SMS actions send sms messages when they are triggered. SMS actions are simple and composed of a phoneNumber to send to, and a messageBody to send. Only a single phone number is supported, if you would like to send to multiple phone numbers, create multiple sms actions. The messageBody supports templating using double bracketed field names to substitude fields on messages sent to the action. For example given a message `{"name": "Robert"}` you may configure a messageBody with templating like "Hello {{name}}" and the message sent would be "Hello Robert"e a new sms action.'
       requestBody:
         content:
           application/json:
@@ -317,7 +359,7 @@ paths:
         - sms action
   /api/v1/controller/authenticated/email:
     post:
-      summary: ''
+      summary: Create an Email Action
       operationId: createEmailAction
       responses:
         '201':
@@ -326,7 +368,7 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-      description: Create a new email action.
+      description: 'Email actions send emails when they are triggered. Email actions are simple and composed of an array of email addresses to send to, a subject, a body, and a boolean field isHtml indicating whether the messageBody should be treated as html or not. The subject and body support templating using double bracketed field names to substitude fields on messages sent to the action. For example given a message `{"name": "Robert"}` you may configure a subject with templating like "Hello {{name}}" and the subject of the email sent would be "Hello Robert". The body field may contain complex html and css to create whatever email you''d like, and supports the same templating outlined for subjects above.'
       requestBody:
         content:
           application/json:
@@ -417,6 +459,38 @@ paths:
       description: Delete an email action.
       tags:
         - email action
+  '/api/v1/http-ingress/authenticated/publish/{pipelineId}':
+    post:
+      summary: ''
+      operationId: publishMessage
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      description: This endpoint is used to publish a message to a pipeline. The message can contain anything you want as long as it's valid json.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            examples:
+              example-message:
+                value:
+                  sensorId: bb596b90-9bed-4d3d-8e45-663245b116d6
+                  reading: '12.79'
+                  unit: psi
+                  timestamp: '2020-07-30T12:30:37.955612'
+    parameters:
+      - schema:
+          type: string
+        name: pipelineId
+        in: path
+        required: true
+        description: The ID of the pipeline to publish the message to
 components:
   schemas:
     pipeline:
