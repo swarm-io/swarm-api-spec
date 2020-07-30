@@ -743,9 +743,12 @@ components:
       type: apiKey
       in: header
       name: X-API-KEY
+      description: 'All api endpoints require you to include a valid api key in the X-API-KEY header. Api keys can be created and viewed in the swarm console at https://console.swarmiolabs.com/account/apikeys'
 tags:
   - name: pipeline
   - name: webhook action
   - name: sms action
   - name: email action
   - name: publish
+security:
+  - ApiKeyAuth: []
