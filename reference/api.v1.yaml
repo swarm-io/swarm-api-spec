@@ -159,6 +159,8 @@ paths:
 
         Webhook actions make http requests when they are triggered. Webhook actions are composed of a `url` to make the request to, the http `method` to use, `headers` to send, `maxConcurrentRequests` to throttle outgoing http requests, `verifyTlsCertificate` which toggles tls certificate verification when sending requests, and `successCodes` which indicate what http response codes should be considered successful. Responses with codes not in the configured `successCodes` will be retried until they are successful.
 
+        Webhook actions support templating on the `url`, `header.name` and `header.value` fields. Anything between double brackets in those fields will be replaced by the value of that field on the message. For example `https://mydomain.com?id={{id}}` will replace `{{id}}` with the value of the `id` field on each message that gets processed. If the field is missing from the message, a webhook will not be sent because we don't know what to replace the templated field with.
+
         <b>What is the purpose of `maxConcurrentRequests`?</b>
 
         `maxConcurrentRequests` is used to throttle outgoing http requests and specifies the maximum number of simultaneous outgoing requests. This is useful if the api that the webhook is sending to has limits, or can't handle large numbers of simultaneous requests.
